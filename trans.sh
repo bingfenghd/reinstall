@@ -1747,6 +1747,8 @@ EOF
     # 此时不能用
     # chroot $os_dir timedatectl set-timezone Asia/Shanghai
     chroot $os_dir systemd-firstboot --force --timezone=Asia/Shanghai
+    # gentoo 不会自动创建 machine-id
+    clear_machine_id $os_dir
     chroot $os_dir systemctl enable systemd-networkd
     chroot $os_dir systemctl enable systemd-resolved
     chroot $os_dir systemctl enable sshd
@@ -2540,7 +2542,7 @@ EOF
 
     download_cloud_init_config $os_dir
 
-    # clear_machine_id $os_dir
+    clear_machine_id $os_dir
 
     # el/ol/fedora/国产fork
     # 1. 禁用 selinux kdump
@@ -3307,7 +3309,7 @@ install_qcow_by_copy() {
         disable_selinux_kdump /os
 
         # centos7 删除 machine-id 后不会自动重建
-        # clear_machine_id /os
+        clear_machine_id /os
 
         # el7 yum 可能会使用 ipv6，即使没有 ipv6 网络
         if [ "$releasever" = 7 ]; then
